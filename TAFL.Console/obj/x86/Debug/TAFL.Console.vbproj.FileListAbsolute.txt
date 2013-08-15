@@ -1,0 +1,15 @@
+C:\Source\Git\TAFL\TAFL.Console\bin\Debug\7z.dll
+C:\Source\Git\TAFL\TAFL.Console\bin\Debug\TAFL.Console.exe.config
+C:\Source\Git\TAFL\TAFL.Console\bin\Debug\TAFL.Console.exe
+C:\Source\Git\TAFL\TAFL.Console\bin\Debug\TAFL.Console.pdb
+C:\Source\Git\TAFL\TAFL.Console\bin\Debug\TAFL.Console.xml
+C:\Source\Git\TAFL\TAFL.Console\bin\Debug\TAFL.dll
+C:\Source\Git\TAFL\TAFL.Console\bin\Debug\SevenZipSharp.dll
+C:\Source\Git\TAFL\TAFL.Console\bin\Debug\TAFL.pdb
+C:\Source\Git\TAFL\TAFL.Console\bin\Debug\TAFL.xml
+C:\Source\Git\TAFL\TAFL.Console\obj\x86\Debug\TAFL.Console.vbprojResolveAssemblyReference.cache
+C:\Source\Git\TAFL\TAFL.Console\obj\x86\Debug\TAFL.Console.Resources.resources
+C:\Source\Git\TAFL\TAFL.Console\obj\x86\Debug\TAFL.Console.vbproj.GenerateResource.Cache
+C:\Source\Git\TAFL\TAFL.Console\obj\x86\Debug\TAFL.Console.exe
+C:\Source\Git\TAFL\TAFL.Console\obj\x86\Debug\TAFL.Console.xml
+C:\Source\Git\TAFL\TAFL.Console\obj\x86\Debug\TAFL.Console.pdb

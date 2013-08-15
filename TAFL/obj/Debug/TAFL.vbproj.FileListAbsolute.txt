@@ -1,0 +1,10 @@
+C:\Source\Git\TAFL\TAFL\bin\Debug\7z.dll
+C:\Source\Git\TAFL\TAFL\bin\Debug\TAFL.dll
+C:\Source\Git\TAFL\TAFL\bin\Debug\TAFL.pdb
+C:\Source\Git\TAFL\TAFL\bin\Debug\TAFL.xml
+C:\Source\Git\TAFL\TAFL\bin\Debug\SevenZipSharp.dll
+C:\Source\Git\TAFL\TAFL\obj\Debug\TAFL.Resources.resources
+C:\Source\Git\TAFL\TAFL\obj\Debug\TAFL.vbproj.GenerateResource.Cache
+C:\Source\Git\TAFL\TAFL\obj\Debug\TAFL.dll
+C:\Source\Git\TAFL\TAFL\obj\Debug\TAFL.xml
+C:\Source\Git\TAFL\TAFL\obj\Debug\TAFL.pdb

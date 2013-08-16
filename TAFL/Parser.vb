@@ -77,14 +77,13 @@ Public Class Parser
 
                 Console.WriteLine("Creating Amateur Table")
                 'SQLNonQuery(conn, amateurSQL)
-                SQLNonQuery(conn, "DELETE FROM amateur")
 
                 Dim fileContents = ""
                 Using sr As New IO.StreamReader(DataPath & IO.Path.GetFileNameWithoutExtension(file) & ".txt")
                     fileContents = sr.ReadToEnd
                 End Using
 
-                Dim pattern = "^(.{6})(.{35})?(.{35})?(.{70})?(.{35})?(.{2})?(.{10})?(.{1})?(.{1})?(.{1})?(.{1})?(.{1})?(.{70})?(.{70})?(.{70})?(.{35})?(.{2})?(.{7})?"
+                Dim pattern = "^(.{7})(.{36})?(.{36})?(.{71})?(.{36})?(.{3})?(.{11})?(.{2})?(.{2})?(.{2})?(.{2})?(.{2})?(.{71})?(.{71})?(.{71})?(.{36})?(.{3})?(.{7})?"
                 Dim matches As MatchCollection = Regex.Matches(fileContents, pattern, RegexOptions.Multiline Or RegexOptions.IgnoreCase)
                 Dim burnCount = 0
                 Dim insertSQL As String = ""
@@ -103,28 +102,6 @@ Public Class Parser
 
                 For Each match As Match In matches
                     If burnCount >= 2 Then
-                        'If burnCount >= 3 Then insertSQL &= ControlChars.NewLine
-                        'insertSQL &= _
-                        '    String.Format("INSERT INTO amateur VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}');", _
-                        '                    match.Groups(1).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(2).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(3).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(4).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(5).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(6).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(7).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(8).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(9).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(10).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(11).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(12).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(13).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(14).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(15).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(16).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(17).Value.Trim.Replace("'", "''"), _
-                        '                    match.Groups(18).Value.Trim.Replace("'", "''"))
-
                         Dim row As DataRow = dt.NewRow
                         For i As Integer = 0 To 17
                             row(i) = match.Groups(i + 1).Value.Trim.Replace("'", "''")
@@ -132,14 +109,13 @@ Public Class Parser
 
                         rows.Add(row)
                         Console.WriteLine(String.Format("Created insert record #{0}", burnCount - 2))
-
                     End If
 
                     burnCount += 1
                 Next
 
+                SQLNonQuery(conn, "DELETE FROM amateur")
                 bulkCopy.WriteToServer(rows.ToArray)
-                'SQLNonQuery(conn, insertSQL)
 
         End Select
 

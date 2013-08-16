@@ -6,19 +6,23 @@ Public Class Parser
 
     Public Sub New()
 
+        Console.WriteLine("Downloading files")
+
         DownloadFiles()
 
+        Console.WriteLine("Downloading files complete")
+
         For Each item In IO.Directory.GetFiles(IO.Path.GetTempPath(), "*.zip")
-            Debug.WriteLine(String.Format("Unzipping file: {0}", item))
+            Console.WriteLine(String.Format("Unzipping file: {0}", item))
 
             Dim archive = New SevenZipExtractor(item)
             archive.ExtractArchive(IO.Path.GetTempPath())
 
-            Debug.WriteLine(String.Format("Unzipping complete: {0}", item))
+            Console.WriteLine(String.Format("Unzipping complete: {0}", item))
 
             Select Case True
                 Case IO.Path.GetFileName(item.ToUpper) = "AMATEUR.ZIP"
-                    Debug.WriteLine(String.Format("Parsing: {0}", item))
+                    Console.WriteLine(String.Format("Parsing: {0}", item))
                     'ParseFile(item)
 
             End Select
@@ -31,9 +35,9 @@ Public Class Parser
             Try
                 Dim test = New Net.WebClient
                 test.DownloadFile(file, IO.Path.GetTempPath() & IO.Path.GetFileName(file))
-                Debug.WriteLine(String.Format("Download of {0} successful", file))
+                Console.WriteLine(String.Format("Download of {0} successful", file))
             Catch ex As Exception
-                Debug.WriteLine(String.Format("Download of {0} failed: {1}", file, ex.ToString))
+                Console.WriteLine(String.Format("Download of {0} failed: {1}", file, ex.ToString))
             End Try
         Next
     End Sub

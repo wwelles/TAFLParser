@@ -10,7 +10,7 @@ Public Class Parser
 
         For Each item In IO.Directory.GetFiles(IO.Path.GetTempPath(), "*.zip")
             Dim archive = New SevenZipExtractor(item)
-            archive.ExtractArchive(".\Data\")
+            archive.ExtractArchive(IO.Path.GetTempPath())
 
             Select Case True
                 Case IO.Path.GetFileName(item.ToUpper) = "AMATEUR.ZIP"

@@ -33,28 +33,41 @@ Public Class Parser
 
     Public Sub New()
 
-        If Environment.MachineName.ToUpper.StartsWith("W7WELLES") Then DataPath = ".\"
+        Dim result = ""
 
-        Console.WriteLine("Downloading files")
-        DownloadFiles()
-        Console.WriteLine("Downloading files complete")
+        Try
 
-        Using conn As New SqlConnection(ConnString)
-            conn.Open()
+            If Environment.MachineName.ToUpper.StartsWith("W7WELLES") Then DataPath = ".\"
 
-            For Each item In IO.Directory.GetFiles(DataPath, "*.zip")
-                Console.WriteLine(String.Format("Unzipping file: {0}", item))
-                Dim archive = New SevenZipExtractor(item)
-                archive.ExtractArchive(DataPath)
-                Console.WriteLine(String.Format("Unzipping complete: {0}", item))
+            Console.WriteLine("Downloading files")
+            DownloadFiles()
+            Console.WriteLine("Downloading files complete")
 
-                Console.WriteLine(String.Format("Parsing: {0}", item))
-                ParseFile(item, conn)
-                Console.WriteLine(String.Format("Parsing complete: {0}", item))
+            Using conn As New SqlConnection(ConnString)
+                conn.Open()
 
-            Next
+                For Each item In IO.Directory.GetFiles(DataPath, "*.zip")
 
-        End Using
+                    Console.WriteLine(String.Format("Unzipping file: {0}", item))
+                    Dim archive = New SevenZipExtractor(item)
+                    archive.ExtractArchive(DataPath)
+                    Console.WriteLine(String.Format("Unzipping complete: {0}", item))
+
+                    Console.WriteLine(String.Format("Parsing: {0}", item))
+                    ParseFile(item, conn)
+                    Console.WriteLine(String.Format("Parsing complete: {0}", item))
+
+                Next
+
+            End Using
+
+            result = "Success"
+
+        Catch ex As Exception
+            result = ex.ToString
+        End Try
+
+        Console.WriteLine(String.Format("Exiting, result: {0}", result))
 
     End Sub
 
@@ -75,8 +88,11 @@ Public Class Parser
         Select Case True
             Case IO.Path.GetFileName(file).ToUpper = "AMATEUR.ZIP"
 
-                Console.WriteLine("Creating Amateur Table")
-                'SQLNonQuery(conn, amateurSQL)
+                Dim exists = SQLTableExists(conn, "amateur")
+                If Not exists Then
+                    Console.WriteLine("Creating Amateur Table")
+                    SQLNonQuery(conn, amateurSQL)
+                End If
 
                 Dim fileContents = ""
                 Using sr As New IO.StreamReader(DataPath & IO.Path.GetFileNameWithoutExtension(file) & ".txt")
@@ -114,7 +130,11 @@ Public Class Parser
                     burnCount += 1
                 Next
 
-                SQLNonQuery(conn, "DELETE FROM amateur")
+                If exists Then
+                    Console.WriteLine("Deleting from Amateur Table")
+                    SQLNonQuery(conn, "DELETE FROM amateur")
+                End If
+
                 bulkCopy.WriteToServer(rows.ToArray)
 
         End Select
@@ -125,5 +145,10 @@ Public Class Parser
         Dim createCmd = New SqlCommand(sql, conn)
         createCmd.ExecuteNonQuery()
     End Sub
+
+    Private Function SQLTableExists(ByRef conn As SqlConnection, name As String) As Boolean
+        Dim cmd = New SqlCommand("select case when exists((select * from information_schema.tables where table_name = '" + name + "')) then 1 else 0 end", conn)
+        Return Integer.Parse(cmd.ExecuteScalar)
+    End Function
 
 End Class

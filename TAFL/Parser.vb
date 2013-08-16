@@ -89,36 +89,57 @@ Public Class Parser
                 Dim burnCount = 0
                 Dim insertSQL As String = ""
 
+                Dim bulkCopy = New SqlBulkCopy(conn)
+                bulkCopy.DestinationTableName = "amateur"
+                For i As Integer = 0 To 17
+                    bulkCopy.ColumnMappings.Add(i, i)
+                Next
+
+                Dim rows As New List(Of DataRow)
+                Dim dt As New DataTable
+                For i As Integer = 0 To 17
+                    dt.Columns.Add()
+                Next
+
                 For Each match As Match In matches
                     If burnCount >= 2 Then
-                        If burnCount >= 3 Then insertSQL &= ControlChars.NewLine
-                        insertSQL &= _
-                            String.Format("INSERT INTO amateur VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}');", _
-                                            match.Groups(1).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(2).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(3).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(4).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(5).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(6).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(7).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(8).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(9).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(10).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(11).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(12).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(13).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(14).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(15).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(16).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(17).Value.Trim.Replace("'", "''"), _
-                                            match.Groups(18).Value.Trim.Replace("'", "''"))
+                        'If burnCount >= 3 Then insertSQL &= ControlChars.NewLine
+                        'insertSQL &= _
+                        '    String.Format("INSERT INTO amateur VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}');", _
+                        '                    match.Groups(1).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(2).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(3).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(4).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(5).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(6).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(7).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(8).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(9).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(10).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(11).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(12).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(13).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(14).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(15).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(16).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(17).Value.Trim.Replace("'", "''"), _
+                        '                    match.Groups(18).Value.Trim.Replace("'", "''"))
+
+                        Dim row As DataRow = dt.NewRow
+                        For i As Integer = 0 To 17
+                            row(i) = match.Groups(i + 1).Value.Trim.Replace("'", "''")
+                        Next
+
+                        rows.Add(row)
                         Console.WriteLine(String.Format("Created insert record #{0}", burnCount - 2))
+
                     End If
 
                     burnCount += 1
                 Next
 
-                SQLNonQuery(conn, insertSQL)
+                bulkCopy.WriteToServer(rows.ToArray)
+                'SQLNonQuery(conn, insertSQL)
 
         End Select
 

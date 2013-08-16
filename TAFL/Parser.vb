@@ -87,10 +87,12 @@ Public Class Parser
                 Dim pattern = "^(.{6})(.{35})?(.{35})?(.{70})?(.{35})?(.{2})?(.{10})?(.{1})?(.{1})?(.{1})?(.{1})?(.{1})?(.{70})?(.{70})?(.{70})?(.{35})?(.{2})?(.{7})?"
                 Dim matches As MatchCollection = Regex.Matches(fileContents, pattern, RegexOptions.Multiline Or RegexOptions.IgnoreCase)
                 Dim burnCount = 0
+                Dim insertSQL As String = ""
 
                 For Each match As Match In matches
                     If burnCount >= 2 Then
-                        Dim insertSQL = _
+                        If burnCount >= 3 Then insertSQL &= ControlChars.NewLine
+                        insertSQL &= _
                             String.Format("INSERT INTO amateur VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}');", _
                                             match.Groups(1).Value.Trim.Replace("'", "''"), _
                                             match.Groups(2).Value.Trim.Replace("'", "''"), _
@@ -110,11 +112,14 @@ Public Class Parser
                                             match.Groups(16).Value.Trim.Replace("'", "''"), _
                                             match.Groups(17).Value.Trim.Replace("'", "''"), _
                                             match.Groups(18).Value.Trim.Replace("'", "''"))
-                        SQLNonQuery(conn, insertSQL)
-                        Console.WriteLine(String.Format("Wrote record {0}", burnCount - 2))
+                        Console.WriteLine(String.Format("Created insert record #{0}", burnCount - 2))
                     End If
+
                     burnCount += 1
                 Next
+
+                SQLNonQuery(conn, insertSQL)
+
         End Select
 
     End Sub

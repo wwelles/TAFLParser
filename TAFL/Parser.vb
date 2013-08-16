@@ -8,7 +8,7 @@ Public Class Parser
 
         DownloadFiles()
 
-        For Each item In IO.Directory.GetFiles(".\Data\", "*.zip")
+        For Each item In IO.Directory.GetFiles(IO.Path.GetTempPath(), "*.zip")
             Dim archive = New SevenZipExtractor(item)
             archive.ExtractArchive(".\Data\")
 
@@ -24,7 +24,7 @@ Public Class Parser
     Private Sub DownloadFiles()
         For Each file In Files
             Dim test = New Net.WebClient
-            test.DownloadFile(file, ".\Data\" & IO.Path.GetFileName(file))
+            test.DownloadFile(file, IO.Path.GetTempPath() & IO.Path.GetFileName(file))
         Next
     End Sub
 

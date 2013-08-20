@@ -74,7 +74,7 @@ Namespace TAFL
                     End If
 
                     Dim fileContents = ""
-                    Using sr As New IO.StreamReader(DataPath & IO.Path.GetFileNameWithoutExtension(file) & ".txt", Text.Encoding.ASCII)
+                    Using sr As New IO.StreamReader(DataPath & IO.Path.GetFileNameWithoutExtension(file) & ".txt", Text.Encoding.GetEncoding(1252))
                         fileContents = sr.ReadToEnd
                     End Using
 

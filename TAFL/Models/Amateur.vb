@@ -8,11 +8,11 @@
         Public Property City As String
         Public Property Province As String
         Public Property Postal As String
-        'Public Property BASIC As String
-        'Public Property 5WPM As String
-        'Public Property 12WPM As String
-        'Public Property ADVANCED As String
-        'Public Property BasicHonours As String
+        Public Property Qualification_BASIC As String
+        Public Property Qualification_5WPM As String
+        Public Property Qualification_12WPM As String
+        Public Property Qualification_ADVANCED As String
+        Public Property Qualification_BasicHonours As String
         Public Property ClubName1 As String
         Public Property ClubName2 As String
         Public Property ClubAddress As String

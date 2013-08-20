@@ -10,7 +10,6 @@ Namespace TAFL
         Private DataPath As String = IO.Path.GetTempPath()
         Private dbConn As DB
 
-
         Public Sub New()
 
             Dim result = ""
@@ -78,8 +77,7 @@ Namespace TAFL
                         fileContents = sr.ReadToEnd
                     End Using
 
-                    Dim pattern = "^(.{7})(.{36})?(.{36})?(.{71})?(.{36})?(.{3})?(.{11})?(.{2})?(.{2})?(.{2})?(.{2})?(.{2})?(.{71})?(.{71})?(.{71})?(.{36})?(.{3})?(.{7})?"
-                    Dim matches As MatchCollection = Regex.Matches(fileContents, pattern, RegexOptions.Multiline Or RegexOptions.IgnoreCase)
+                    Dim matches As MatchCollection = Regex.Matches(fileContents, "^(.{7})(.{36})?(.{36})?(.{71})?(.{36})?(.{3})?(.{11})?(.{2})?(.{2})?(.{2})?(.{2})?(.{2})?(.{71})?(.{71})?(.{71})?(.{36})?(.{3})?(.{7})?", RegexOptions.Multiline Or RegexOptions.IgnoreCase)
                     Dim burnCount = 0
                     Dim insertSQL As String = ""
 
@@ -119,6 +117,12 @@ Namespace TAFL
             End Select
 
         End Sub
+
+        Private Function getChangeDate(fileContents As String) As Date
+            Dim pattern = "^(.{4}-.{2}-.{2})"
+            Dim match As Match = Regex.Match(fileContents, pattern, RegexOptions.Multiline Or RegexOptions.IgnoreCase)
+            Return Date.Parse(match.Groups(1).Value)
+        End Function
 
     End Class
 
